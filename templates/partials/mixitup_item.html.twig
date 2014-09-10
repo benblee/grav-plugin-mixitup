@@ -1,0 +1,24 @@
+<div class="mix{% if page.taxonomy.tag %}{% for tag in page.taxonomy.tag %} {{ tag }}{% endfor %}{% endif %}" style="display: block;">
+<div class="sg-mixitup-spacer">
+    <div class="list-blog-header">
+        {% if big_header %}
+            <a href="{{ page.url }}">{{ page.media.images|first.cropResize(420,280).html }}</a>
+        {% else %}
+            <a href="{{ page.url }}">{{ page.media.images|first.cropZoom(420,280).html }}</a>
+        {% endif %}
+        <h4><a href="{{ page.url }}">{{ page.title }}</a></h4>
+        <span class="list-blog-date">
+            <span>{{ page.date|date("d") }}</span>
+            <em>{{ page.date|date("M") }}</em>
+        </span>
+    </div>
+    <div class="list-blog-padding">
+    {% if truncate %}
+        <p>{{ page.content|truncate(150) }}</p>
+        <p class="button"><a href="{{ page.url }}">Read More</a></p>
+    {% else %}
+        <p class="button"><a href="{{ page.url }}">Read More</a></p>
+    {% endif %}
+    </div>
+</div>
+</div>

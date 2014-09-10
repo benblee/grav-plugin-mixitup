@@ -1,0 +1,10 @@
+{% set taxlist = taxonomylist.get() %}
+{% if taxlist %}
+<div class="sg-filters">
+	<label>Filter:</label>
+	<button class="filter" data-filter="all">All</button>
+	{% for tax,value in taxlist[taxonomy] %}
+		<button class="filter" data-filter=".{{ tax }}">{{ tax }}</button>
+	{% endfor %}
+</div>
+{% endif %}

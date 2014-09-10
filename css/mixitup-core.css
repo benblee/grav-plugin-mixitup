@@ -1,0 +1,133 @@
+*{
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body, button{
+  font-family: 'Helvetica Neue', arial, sans-serif;
+}
+
+.sg-filters {
+    background: none repeat scroll 0 0 transparent;
+    color: #333;
+    padding: 1%;
+}
+
+.sg-filters label{
+  font-weight: 300;
+  margin: 0 .4em 0 0;
+  display: inline-block;
+}
+
+.sg-filters button {
+    background: none repeat scroll 0 0 #666;
+    border: 0 none;
+    border-radius: 4px;
+    color: #eee;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 100%;
+    margin: 3px 0;
+    padding: 0.4em 0.8em;
+}
+
+.sg-filters button.active{
+  background: #68b8c4;
+}
+
+.sg-filters button:focus{
+  outline: 0 none;
+}
+
+.sg-filters button + label{
+  margin-left: 1em;
+}
+
+.sg-container {
+    background: none repeat scroll 0 0 transparent;
+	display: flex;
+	flex-flow: row wrap;
+    font-size: 1rem;
+    padding: 0;
+    text-align: justify;
+	-webkit-backface-visibility: hidden;
+}
+
+.sg-container:after{
+  content: '';
+  display: inline-block;
+  width: 100%;
+}
+
+.sg-container .mix,
+.sg-container .gap{
+  display: inline-block;
+  width: 49%;
+}
+
+.sg-container .mix{
+  text-align: left;
+  background: #eee;
+  margin: 3px 0.25%;
+  display: none;
+}
+
+.sg-container .mix:after{
+  content: attr(data-myorder);
+  color: white;
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: top;
+  padding: 4% 6%;
+  font-weight: 700;
+}
+
+.sg-container .mix:before{
+  content: '';
+  display: none;
+  padding-top: 0;
+}
+
+.sg-mixitup-spacer {
+	padding: 10px;
+}
+
+.sg-container h4 {
+	line-height: 1.2;
+	margin: 10px 0;
+}
+.sg-container p {
+	line-height: 1.4;
+	margin: 10px 0;
+}
+
+@media all and (max-width: 420px){
+  .sg-container .mix,
+  .sg-container .gap{
+    width: 99.5%;
+  }
+}
+
+@media all and (min-width: 421px){
+  .sg-container .mix,
+  .sg-container .gap{
+    width: 49.5%;
+  }
+}
+
+@media all and (min-width: 768px){
+  .sg-container .mix,
+  .sg-container .gap{
+	width: 32.8333%;
+  }
+}
+
+@media all and (min-width: 960px){
+  .sg-container .mix,
+  .sg-container .gap{
+	width: 24.5%;
+  }
+}

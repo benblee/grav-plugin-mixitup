@@ -1,0 +1,45 @@
+{% embed 'partials/base.html.twig' %}
+
+	{% set collection = page.collection() %}
+	{% set base_url = base_url_relative ~ site.blog.route %}
+
+	{% block content %}
+		{% set blog_image = page.media.images|first.grayscale().contrast(20).brightness(-100).colorize(-35,81,122) %}
+
+		{% if blog_image %}
+			<div class="flush-top blog-header blog-header-image" style="background-image: url({{ blog_image.url }});">
+		{% else %}
+		<div class="blog-header">
+		{% endif %}
+			{{ page.content }}
+		</div>
+
+		{% include 'breadcrumbs.html.twig' %}
+
+		<div class="content-wrapper">
+			<div>
+				{% include 'partials/mixitup_filter.html.twig' with {'taxonomy':'tag'} %}
+				<div id="mixitupContainer" class="sg-container">
+					{% for child in collection %}
+						{% include 'partials/mixitup_item.html.twig' with {'page':child, 'truncate':true} %}
+					{% endfor %}
+					<div class="gap"></div>
+					<div class="gap"></div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
+
+	{% block pagination %}
+	    {% if collection.params.pagination %}
+	    {% include 'pagination.html.twig' with {'pagination':collection.params.pagination} %}
+	    {% endif %}
+	{% endblock %}
+
+{% endembed %}
+
+<script type="text/javascript">
+	$(function(){
+	  $('#mixitupContainer').mixItUp();
+	});
+</script>
