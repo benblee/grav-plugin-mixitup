@@ -1,7 +1,15 @@
 # Grav MixItUp Plugin
 
 `mixitup` is a [Grav](http://github.com/getgrav/grav) plugin that adds a unique blog layout with filterable results based on Grav's included taxonomy tags.
-It uses the jQuery plugin [mixitup](https://mixitup.kunkalabs.com/), hence the name.
+It uses the jQuery plugin [MixItUp](https://mixitup.kunkalabs.com/), hence the name.
+
+MixItUp Licenses
+=========
+
+For use in commercial projects and products MixItUp requires that you purchase a commercial license.
+
+For more information see [mixitup.kunkalabs.com/licenses](https://mixitup.kunkalabs.com/licenses).
+
 
 # Installation
 
