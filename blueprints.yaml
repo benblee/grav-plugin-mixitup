@@ -1,9 +1,19 @@
-name: MixItUp Plugin
+name: MixitupPages
 version: 0.0.1
 description: Creative Content Display and Sorting - https://mixitup.kunkalabs.com/
-validation: strict
+icon: cubes
+author:
+  name: SmartGravity
+  email: benblee@smartgravity.com
+  url: http://www.smartgravity.com
+homepage: http://www.smartgravity.com
+demo: http://www.smartgravity.com
+keywords: mixitup, gallery, photos, pics, portfolio
+bugs: http://www.smartgravity.com
+license: MIT
 
 form:
+  validation: loose
   fields:
     enabled:
       type: toggle
@@ -26,3 +36,10 @@ form:
         0: Disabled
       validate:
         type: bool
+
+    template:
+      type: text
+      size: medium
+      label: Template
+      default: mixitup
+      help: Name of the template for the Mixitup plugin

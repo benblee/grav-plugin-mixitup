@@ -25,7 +25,7 @@ You should now have all the plugin files under
 
 You can find out more about the script used in this plugin here [mixitup](https://mixitup.kunkalabs.com/).
 
-From your page headers, you can then tweak almost all the settings that lightSlider comes with. 
+From your page headers, you can then tweak almost all the settings that Mixitup comes with. 
 
 eg:
 

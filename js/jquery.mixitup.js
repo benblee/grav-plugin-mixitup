@@ -1,7 +1,7 @@
 /**!
- * MixItUp v2.1.6
+ * MixItUp v2.1.10
  *
- * @copyright Copyright 2014 KunkaLabs Limited.
+ * @copyright Copyright 2015 KunkaLabs Limited.
  * @author    KunkaLabs Limited.
  * @link      https://mixitup.kunkalabs.com
  *
@@ -13,6 +13,7 @@
  */
 
 (function($, undf){
+	'use strict';
 	
 	/**
 	 * MixItUp Constructor Function
@@ -385,7 +386,7 @@
 
 			self._$targets = self._$container.find(self.selectors.target);
 			
-			for(var i = 0;  i < self._$targets.length; i++){
+			for(var i = 0; i < self._$targets.length; i++){
 				var target = self._$targets[i];
 					
 				if(target.dataset === undf || force){
@@ -394,7 +395,7 @@
 					
 					for(var j = 0; j < target.attributes.length; j++){
 						
-						var attr =  target.attributes[j],
+						var attr = target.attributes[j],
 							name = attr.name,
 							val = attr.value;
 							
@@ -416,7 +417,7 @@
 			){
 				self._origOrder = [];
 				
-				for(var i = 0;  i < self._$targets.length; i++){
+				for(var i = 0; i < self._$targets.length; i++){
 					var target = self._$targets[i];
 					
 					self._origOrder.push(target);
@@ -583,9 +584,11 @@
 					sort: command.sort
 				},
 				update = function($el, filter){
-					(multi && type == 'filter' && !(output.filter === 'none' || output.filter === '')) ?
-						$el.filter(filter).addClass(self.controls.activeClass) :
-						$el.removeClass(self.controls.activeClass).filter(filter).addClass(self.controls.activeClass);
+					try {
+						(multi && type === 'filter' && !(output.filter === 'none' || output.filter === '')) ?
+								$el.filter(filter).addClass(self.controls.activeClass) :
+								$el.removeClass(self.controls.activeClass).filter(filter).addClass(self.controls.activeClass);
+					} catch(e) {}
 				},
 				type = 'filter',
 				$el = null;
@@ -699,10 +702,10 @@
 				attrB = isNaN(getData(b) * 1) ? getData(b).toLowerCase() : getData(b) * 1;
 				
 			if(attrA < attrB)
-				return order == 'asc' ? -1 : 1;
+				return order === 'asc' ? -1 : 1;
 			if(attrA > attrB)
-				return order == 'asc' ? 1 : -1;
-			if(attrA == attrB && self._newSort.length > depth+1)
+				return order === 'asc' ? 1 : -1;
+			if(attrA === attrB && self._newSort.length > depth+1)
 				return self._compare(a, b, depth+1);
 
 			return 0;
@@ -718,7 +721,7 @@
 			var self = this,
 				order = reset ? self._startOrder : self._newOrder,
 				targets = self._$parent[0].querySelectorAll(self.selectors.target),
-				nextSibling = targets[targets.length -1].nextElementSibling,
+				nextSibling = targets.length ? targets[targets.length -1].nextElementSibling : null,
 				frag = document.createDocumentFragment();
 				
 			self._execAction('_printSort', 0, arguments);
@@ -729,7 +732,7 @@
 
 				if(target.style.position === 'absolute') continue;
 			
-				if(whiteSpace && whiteSpace.nodeName == '#text'){
+				if(whiteSpace && whiteSpace.nodeName === '#text'){
 					self._$parent[0].removeChild(whiteSpace);
 				}
 				
@@ -739,7 +742,7 @@
 			for(var i = 0; i < order.length; i++){
 				var el = order[i];
 
-				if(self._newSort[0].sortBy == 'default' && self._newSort[0].order == 'desc' && !reset){
+				if(self._newSort[0].sortBy === 'default' && self._newSort[0].order === 'desc' && !reset){
 					var firstChild = frag.firstChild;
 					frag.insertBefore(el, firstChild);
 					frag.insertBefore(document.createTextNode(' '), el);
@@ -777,7 +780,7 @@
 					
 				newSort.push(ruleObj);
 				
-				if(ruleObj.sortBy == 'default' || ruleObj.sortBy == 'random') break;
+				if(ruleObj.sortBy === 'default' || ruleObj.sortBy === 'random') break;
 			}
 			
 			return self._execFilter('_parseSort', newSort, arguments);
@@ -992,7 +995,12 @@
 			el.dataset[stage+'PosY'] = el.offsetTop;
 
 			if(self.animation.animateResizeTargets){
-				elStyle = window.getComputedStyle(el);
+				elStyle = !self._suckMode ? 
+					window.getComputedStyle(el) : 
+					{
+						marginBottom: '',
+						marginRight: ''
+					};
 			
 				el.dataset[stage+'MarginBottom'] = parseInt(elStyle.marginBottom);
 				el.dataset[stage+'MarginRight'] = parseInt(elStyle.marginRight);
@@ -1388,7 +1396,9 @@
 		
 		_cleanUp: function(){
 			var self = this,
-				targetStyles = self.animation.animateResizeTargets ? 'transform opacity width height margin-bottom margin-right' : 'transform opacity';
+				targetStyles = self.animation.animateResizeTargets ? 
+					'transform opacity width height margin-bottom margin-right' :
+					'transform opacity',
 				unBrake = function(){
 					self._$targets.removeStyle('transition', self._prefix);
 				};
@@ -1490,10 +1500,12 @@
 		
 		_getPrefixedCSS: function(property, value, prefixValue){
 			var self = this,
-				styles = {};
+				styles = {},
+				prefix = '',
+				i = -1;
 		
 			for(i = 0; i < 2; i++){
-				var prefix = i === 0 ? self._prefix : '';
+				prefix = i === 0 ? self._prefix : '';
 				prefixValue ? styles[prefix+property] = prefix+value : styles[prefix+property] = value;
 			}
 			
@@ -1510,7 +1522,7 @@
 		_getDelay: function(i){
 			var self = this,
 				n = typeof self.animation.staggerSequence === 'function' ? self.animation.staggerSequence.call(self._domNode, i, self._state) : i,
-				delay = self.animation.stagger ?  n * self.animation.staggerDuration : 0;
+				delay = self.animation.stagger ? n * self.animation.staggerDuration : 0;
 				
 			return self._execFilter('_getDelay', delay, arguments);
 		},
@@ -1946,7 +1958,9 @@
 		 */
 		
 		destroy: function(hideAll){
-			var self = this;
+			var self = this,
+				filters = $.MixItUp.prototype._bound._filter,
+				sorts = $.MixItUp.prototype._bound._sort;
 			
 			self._execAction('destroy', 0, arguments);
 		
@@ -1964,7 +1978,19 @@
 			}
 			
 			self._execAction('destroy', 1, arguments);
-			
+
+			if(filters[self.selectors.filter] && filters[self.selectors.filter] > 1) {
+				filters[self.selectors.filter]--;
+			} else if(filters[self.selectors.filter] === 1) {
+				delete filters[self.selectors.filter];
+			}
+
+			if(sorts[self.selectors.sort] && sorts[self.selectors.sort] > 1) {
+				sorts[self.selectors.sort]--;
+			} else if(sorts[self.selectors.sort] === 1) {
+				delete sorts[self.selectors.sort];
+			}
+
 			delete $.MixItUp.prototype._instances[self._id];
 		}
 		
@@ -2004,7 +2030,7 @@
 		eachReturn = this.each(function(){
 			if(args && typeof args[0] === 'string'){
 				var instance = $.MixItUp.prototype._instances[this.id];
-				if(args[0] == 'isLoaded'){
+				if(args[0] === 'isLoaded'){
 					dataReturn.push(instance ? true : false);
 				} else {
 					var data = instance[args[0]](args[1], args[2], args[3]);
@@ -2036,8 +2062,21 @@
 				styles = style.split(' ');
 				
 			for(var i = 0; i < styles.length; i++){
-				for(var j = 0; j < 2; j++){
-					var prop = j ? styles[i] : prefix+styles[i];
+				for(var j = 0; j < 4; j++){
+					switch (j) {
+						case 0:
+							var prop = styles[i];
+							break;
+						case 1:
+							var prop = $.MixItUp.prototype._helpers._camelCase(prop);
+							break;
+						case 2:
+							var prop = prefix+styles[i];
+							break;
+						case 3:
+							var prop = $.MixItUp.prototype._helpers._camelCase(prefix+styles[i]);
+					}
+					
 					if(
 						el.style[prop] !== undf && 
 						typeof el.style[prop] !== 'unknown' &&
@@ -2045,7 +2084,8 @@
 					){
 						el.style[prop] = '';
 					}
-					if(!prefix)break;
+					
+					if(!prefix && j === 1)break;
 				}
 			}
 			

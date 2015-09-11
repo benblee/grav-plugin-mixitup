@@ -4,6 +4,8 @@ namespace Grav\Plugin;
 use Grav\Common\Plugin;
 use Grav\Common\Grav;
 use Grav\Common\Page\Page;
+use Grav\Common\Taxonomy;
+use RocketTheme\Toolbox\Event\Event;
 
 class MixitupPlugin extends Plugin
 {
@@ -13,9 +15,18 @@ class MixitupPlugin extends Plugin
     public static function getSubscribedEvents() {
         return [
             'onPageInitialized' => ['onPageInitialized', 0],
+            'onGetPageTemplates' => ['onGetPageTemplates', 0],
             'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
             'onTwigSiteVariables' => ['onTwigSiteVariables', 0]
         ];
+    }
+
+    /**
+     * Add current directory to twig lookup paths.
+     */
+    public function onTwigTemplatePaths()
+    {
+        $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
     }
 
     /**
@@ -36,11 +47,13 @@ class MixitupPlugin extends Plugin
     }
 
     /**
-     * Add current directory to twig lookup paths.
+     * Add page template types.
      */
-    public function onTwigTemplatePaths()
+    public function onGetPageTemplates(Event $event)
     {
-        $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
+        /** @var Types $types */
+        $types = $event->types;
+        $types->scanTemplates('plugins://mixitup/templates');
     }
 
     /**
