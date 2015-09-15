@@ -19,24 +19,28 @@ You should now have all the plugin files under
 
 	/your/site/grav/user/plugins/mixitup
 
-> NOTE: This plugin is a modular component for Grav which requires [Grav](http://github.com/getgrav/grav), the [Error](https://github.com/getgrav/grav-plugin-error) and [Problems](https://github.com/getgrav/grav-plugin-problems) plugins, and a theme to be installed in order to operate.
 
 # Digging Deeper
 
 You can find out more about the script used in this plugin here [mixitup](https://mixitup.kunkalabs.com/).
 
-From your page headers, you can then tweak almost all the settings that Mixitup comes with. 
+Use page headers to tweak the settings that Mixitup comes with. 
+
+*Use the following example as a new menu item with the [Grav Skeleton Blog Site](https://github.com/getgrav/grav-skeleton-blog-site) to see Mixitup in action*
 
 eg:
 
 ```
 ---
-title: Mixitup Blog
-
+title: 'Mixitup Demo'
+body_classes: 'header-image fullwidth'
+menu: Mixitup
+content:
+    items:
+       @taxonomy.category: [blog]
 ---
 
-# My MixItUp Blog
-## Click the tags to filter the articles
+# Mixitup Blog Tests
+## Blog articles should be sortable by tag!
 ```
 
-> Note: 
